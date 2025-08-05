@@ -1,0 +1,88 @@
+{
+    "Metadata" : {
+        "AWSToolsMetrics" : {
+            "IaC_Generator" : "arn:aws:cloudformation:us-east-2:876164100850:generatedTemplate/77a306c0-aca6-4561-aba7-1a792991c790"
+        }
+    },
+    "Parameters" : {
+        "LatestAmiId" : {
+            "Type" : "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
+            "Default" : "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
+        },
+        "ExistingVpcId" : {
+            "Type" : "AWS::EC2::VPC::Id",
+            "Default" : "vpc-0f92e11d5df3c73d7"
+        },
+        "ExistingSubnetId" : {
+            "Type" : "AWS::EC2::Subnet::Id",
+            "Default" : "subnet-036728fe87fab51b8"
+        },
+        "AvailabilityZoneUsEast2a" : {
+            "Type" : "String",
+            "Default" : "us-east-2a"
+        },
+        "ExistingSecurityGroupId"  : {
+            "Type" : "AWS::EC2::SecurityGroup::Id",
+            "Default" : "sg-07e2181e6510fc06f",
+            "Description" : "Should belongs to VPC"
+        }
+    },
+    "Resources"  : {
+        "EC2Instance" : {
+            "UpdateReplacePolicy" : "Delete",
+            "Type"                : "AWS::EC2::Instance",
+            "DeletionPolicy"      : "Delete",
+            "Properties"          : {
+                "Tenancy" : "default",
+                "NetworkInterfaces" : [
+                    {
+                        "AssociatePublicIpAddress" : true,
+                        "DeviceIndex"              : "0",
+                        "SubnetId"                 : {
+                            "Ref" : "ExistingSubnetId"
+                        },
+                        "GroupSet"                 : [
+                            {
+                                "Ref" : "ExistingSecurityGroupId"
+                            }
+                        ]
+                    }
+                ],
+                "InstanceInitiatedShutdownBehavior" : "stop",
+                "BlockDeviceMappings"               : [
+                    {
+                        "Ebs" : {
+                            "VolumeType" : "gp3",
+                            "Iops"       : 3000,
+                            "VolumeSize" : 10,
+                            "Encrypted"  : false,
+                            "DeleteOnTermination" : true
+                        },
+                        "DeviceName" : "/dev/xvda"
+                    }
+                ],
+                "AvailabilityZone"                  : {
+                    "Ref" : "AvailabilityZoneUsEast2a"
+                },
+                "EbsOptimized"                      : false,
+                "DisableApiTermination"             : false,
+                "KeyName"                           : "keyPairForTest",
+                "SourceDestCheck"                   : true,
+                "ImageId"                           : {
+                    "Ref" : "LatestAmiId"
+                },
+                "InstanceType"                      : "t2.micro",
+                "Monitoring"                        : false,
+                "Tags"                              : [
+                    {
+                        "Value" : "DR-Dot-Net-WebServer",
+                        "Key"   : "Name"
+                    }
+                ],
+                "CreditSpecification"               : {
+                    "CPUCredits" : "standard"
+                }
+            }
+        }
+    }
+}

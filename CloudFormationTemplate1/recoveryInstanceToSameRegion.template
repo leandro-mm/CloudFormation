@@ -1,0 +1,109 @@
+{
+    "AWSTemplateFormatVersion" : "2010-09-09",
+    "Description"              : "",
+    "Parameters"               : {
+        "AmiId" : {
+            "Type" : "AWS::EC2::Image::Id",
+            "Default" : "ami-002eb5c0d66672c01"
+        },
+        "ExistingSubnetId" : {
+            "Type" : "AWS::EC2::Subnet::Id",
+            "Default" : "subnet-053ce34fba9aadd39"
+        },
+      "AZname": {
+        "Type": "String",
+        "Default": "us-east-1a"
+      },
+        "ExistingSecurityGroupId" : {
+            "Type" : "AWS::EC2::SecurityGroup::Id",
+            "Default" : "sg-08e49f5f1f4b4adc3",
+            "Description" : "Should belongs to VPC"
+        },
+        "KeyPairName"             : {
+            "Type" : "AWS::EC2::KeyPair::KeyName",
+            "Default" : "dotNetWebServerKeyPairs",
+            "Description" : "Name of an existing EC2 Key Pair"
+        }
+    },
+    "Resources"                : {
+        "EC2Instance" : {
+            "UpdateReplacePolicy" : "Delete",
+            "Type"                : "AWS::EC2::Instance",
+            "DeletionPolicy"      : "Delete",
+            "Properties"          : {
+                "Tenancy" : "default",
+                "NetworkInterfaces" : [
+                    {
+                        "AssociatePublicIpAddress" : true,
+                        "DeviceIndex"              : "0",
+                        "SubnetId"                 : {
+                            "Ref" : "ExistingSubnetId"
+                        },
+                        "GroupSet"                 : [
+                            {
+                                "Ref" : "ExistingSecurityGroupId"
+                            }
+                        ]
+                    }
+                ],
+                "InstanceInitiatedShutdownBehavior" : "stop",
+                "BlockDeviceMappings"               : [
+                    {
+                        "Ebs" : {
+                            "VolumeType" : "gp3",
+                            "Iops"       : 3000,
+                            "VolumeSize" : 10,
+                            "Encrypted"  : false,
+                            "DeleteOnTermination" : false
+                        },
+                        "DeviceName" : "/dev/xvda"
+                    }
+                ],
+                "AvailabilityZone"                  : {
+                    "Ref" : "AZname"
+                },
+                "EbsOptimized"                      : false,
+                "DisableApiTermination"             : false,
+                "KeyName"                           : {
+                    "Ref" : "KeyPairName"
+                },
+                "SourceDestCheck"                   : true,
+                "ImageId"                           : {
+                    "Ref" : "AmiId"
+                },
+                "InstanceType"                      : "t2.micro",
+                "Monitoring"                        : false,
+                "Tags"                              : [
+                    {
+                        "Value" : "DR-Dot-Net-WebServer",
+                        "Key"   : "Name"
+                    }
+                ],
+                "CreditSpecification"               : {
+                    "CPUCredits" : "standard"
+                }
+            }
+        }
+    },
+  "Outputs": {
+    "InstanceId": {
+      "Description": "Recovered instance ID",
+      "Value": {
+        "Ref": "EC2Instance"
+      }
+    },
+    "PublicIP": {
+      "Description": "Recovered instance public IP address",
+      "Value": {
+        "Fn::GetAtt": [
+          "EC2Instance",
+          "PublicIp"
+        ]
+      }
+    },
+    "InstancePublicDNS": {
+      "Description": "Public DNS of the EC2 instance",
+      "Value": { "Fn::GetAtt": [ "EC2Instance", "PublicDnsName" ] }
+    }
+  }
+}
