@@ -10,10 +10,10 @@
             "Type" : "AWS::EC2::Subnet::Id",
             "Default" : "subnet-053ce34fba9aadd39"
         },
-      "AZname": {
-        "Type": "String",
-        "Default": "us-east-1a"
-      },
+        "AZname"           : {
+            "Type" : "String",
+            "Default" : "us-east-1a"
+        },
         "ExistingSecurityGroupId" : {
             "Type" : "AWS::EC2::SecurityGroup::Id",
             "Default" : "sg-08e49f5f1f4b4adc3",
@@ -85,25 +85,30 @@
             }
         }
     },
-  "Outputs": {
-    "InstanceId": {
-      "Description": "Recovered instance ID",
-      "Value": {
-        "Ref": "EC2Instance"
-      }
-    },
-    "PublicIP": {
-      "Description": "Recovered instance public IP address",
-      "Value": {
-        "Fn::GetAtt": [
-          "EC2Instance",
-          "PublicIp"
-        ]
-      }
-    },
-    "InstancePublicDNS": {
-      "Description": "Public DNS of the EC2 instance",
-      "Value": { "Fn::GetAtt": [ "EC2Instance", "PublicDnsName" ] }
+    "Outputs"                  : {
+        "InstanceId" : {
+            "Description" : "Recovered instance ID",
+            "Value"       : {
+                "Ref" : "EC2Instance"
+            }
+        },
+        "PublicIP"   : {
+            "Description" : "Recovered instance public IP address",
+            "Value"       : {
+                "Fn::GetAtt" : [
+                    "EC2Instance",
+                    "PublicIp"
+                ]
+            }
+        },
+        "InstancePublicDNS" : {
+            "Description" : "Public DNS of the EC2 instance",
+            "Value"       : {
+                "Fn::GetAtt" : [
+                    "EC2Instance",
+                    "PublicDnsName"
+                ]
+            }
+        }
     }
-  }
 }
