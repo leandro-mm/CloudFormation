@@ -15,5 +15,6 @@
     <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.4" />
     <PackageReference Include="AWSSDK.EC2" Version="4.0.26.1" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.8" />
   </ItemGroup>
 </Project>

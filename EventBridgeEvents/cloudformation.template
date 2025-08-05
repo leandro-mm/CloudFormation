@@ -1,0 +1,46 @@
+﻿{
+	"AWSTemplateFormatVersion": "2010-09-09",
+
+	"Description": "EventBridge rules to trigger existing Lambda functions on EC2 state changes",
+
+	"Parameters": {
+		"HandleEC2StoppedFunctionArn": {
+			"Type": "String",
+			"Default": "arn:aws:lambda:us-east-1:876164100850:function:HandleEC2Stopped"
+		}
+	},
+
+	"Resources": {
+		"EC2StoppedRule": {
+			"Type": "AWS::Events::Rule",
+			"Properties": {
+				"Name": "EC2StoppedStateRule",
+				"EventPattern": {
+					"source": [ "aws.ec2" ],
+					"detail-type": [ "EC2 Instance State-change Notification" ],
+					"detail": {
+						"state": [ "stopped" ]
+					}
+				},
+				"Targets": [
+					{
+						"Arn": { "Ref": "HandleEC2StoppedFunctionArn" },
+						"Id": "TargetStoppedLambda"
+					}
+				]
+			}
+		},
+		"PermissionForStoppedLambda": {
+			"Type": "AWS::Lambda::Permission",
+			"Properties": {
+				"FunctionName": { "Ref": "HandleEC2StoppedFunctionArn" },
+				"Action": "lambda:InvokeFunction",
+				"Principal": "events.amazonaws.com",
+				"SourceArn": { "Fn::GetAtt": [ "EC2StoppedRule", "Arn" ] }
+			}
+		}
+	},
+
+	"Outputs": {
+	}
+}
