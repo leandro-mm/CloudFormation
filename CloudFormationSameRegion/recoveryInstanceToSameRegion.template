@@ -4,7 +4,7 @@
     "Parameters"               : {
         "AmiId" : {
             "Type" : "AWS::EC2::Image::Id",
-            "Default" : "ami-002eb5c0d66672c01"
+            "Default" : "ami-06f7f7d0bb3b03c4d"
         },
         "ExistingSubnetId" : {
             "Type" : "AWS::EC2::Subnet::Id",
@@ -23,6 +23,25 @@
             "Type" : "AWS::EC2::KeyPair::KeyName",
             "Default" : "dotNetWebServerKeyPairs",
             "Description" : "Name of an existing EC2 Key Pair"
+        },
+        "ElasticAllocationID"     : {
+            "Type" : "String",
+            "Default" : "eipalloc-08c014d050f8c6bd1",
+            "Description" : "Optional Elastic IP Allocation ID to associate with the instance"
+        }
+    },
+    "Conditions"               : {
+        "HasElasticIP" : {
+            "Fn::Not" : [
+                {
+                    "Fn::Equals" : [
+                        {
+                            "Ref" : "ElasticAllocationID"
+                        },
+                        ""
+                    ]
+                }
+            ]
         }
     },
     "Resources"                : {
@@ -75,12 +94,24 @@
                 "Monitoring"                        : false,
                 "Tags"                              : [
                     {
-                        "Value" : "DR-Dot-Net-WebServer",
+                        "Value" : "Dot-Net-WebServer-Recovery",
                         "Key"   : "Name"
                     }
                 ],
                 "CreditSpecification"               : {
                     "CPUCredits" : "standard"
+                }
+            }
+        },
+        "EIPAssociation" : {
+            "Type" : "AWS::EC2::EIPAssociation",
+            "Condition" : "HasElasticIP",
+            "Properties" : {
+                "AllocationId" : {
+                    "Ref" : "ElasticAllocationID"
+                },
+                "InstanceId"   : {
+                    "Ref" : "EC2Instance"
                 }
             }
         }

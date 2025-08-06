@@ -75,7 +75,7 @@
                 "Monitoring"                        : false,
                 "Tags"                              : [
                     {
-                        "Value" : "DR-Dot-Net-WebServer",
+                        "Value" : "new EC Instance",
                         "Key"   : "Name"
                     }
                 ],
