@@ -7,15 +7,15 @@
     "Parameters" : {
         "AzId" : {
             "Type" : "String",
-            "Default" : "usw1-az1"
+            "Default" : "usw2-az2"
         },
         "AzName" : {
             "Type" : "String",
-            "Default" : "us-west-1a"
+            "Default" : "us-west-2a"
         },
         "AmiId"  : {
             "Type" : "AWS::EC2::Image::Id",
-            "Default" : "ami-0ecf1768e7505ef90"
+            "Default" : "ami-0d7b45f992283d965"
         },
         "KeyPairName" : {
             "Type" : "String",
@@ -23,151 +23,7 @@
         }
     },
     "Resources"  : {
-        "EC2SubnetEA" : {
-            "UpdateReplacePolicy" : "Delete",
-            "Type"                : "AWS::EC2::Subnet",
-            "DeletionPolicy"      : "Delete",
-            "Properties"          : {
-                "MapPublicIpOnLaunch" : true,
-                "EnableDns64"         : false,
-                "VpcId"               : {
-                    "Ref" : "EC2VPC"
-                },
-                "AvailabilityZoneId"  : {
-                    "Ref" : "AzId"
-                },
-                "PrivateDnsNameOptionsOnLaunch" : {
-                    "EnableResourceNameDnsARecord" : false,
-                    "HostnameType"                 : "ip-name",
-                    "EnableResourceNameDnsAAAARecord" : false
-                },
-                "CidrBlock"                     : "172.31.48.0/20",
-                "Ipv6Native"                    : false,
-                "Tags"                          : [
-                ]
-            }
-        },
-        "EC2SecurityGroupHA" : {
-            "UpdateReplacePolicy" : "Delete",
-            "Type"                : "AWS::EC2::SecurityGroup",
-            "DeletionPolicy"      : "Delete",
-            "Properties"          : {
-                "GroupDescription" : "web-server-sg",
-                "GroupName"        : "web-server-sg",
-                "VpcId"            : {
-                    "Ref" : "EC2VPC"
-                },
-                "SecurityGroupIngress" : [
-                    {
-                        "CidrIp" : "0.0.0.0/0",
-                        "IpProtocol" : "tcp",
-                        "FromPort"   : 80,
-                        "ToPort"     : 80
-                    },
-                    {
-                        "CidrIp" : "0.0.0.0/0",
-                        "IpProtocol" : "tcp",
-                        "FromPort"   : 5000,
-                        "ToPort"     : 5000
-                    },
-                    {
-                        "CidrIp" : "0.0.0.0/0",
-                        "IpProtocol" : "tcp",
-                        "FromPort"   : 443,
-                        "ToPort"     : 443
-                    },
-                    {
-                        "CidrIp" : "0.0.0.0/0",
-                        "IpProtocol" : "tcp",
-                        "FromPort"   : 6000,
-                        "ToPort"     : 6000
-                    }
-                ],
-                "SecurityGroupEgress"  : [
-                    {
-                        "CidrIp" : "0.0.0.0/0",
-                        "IpProtocol" : "-1",
-                        "FromPort"   : -1,
-                        "ToPort"     : -1
-                    }
-                ]
-            }
-        },
-        "EC2SubnetKE"        : {
-            "UpdateReplacePolicy" : "Delete",
-            "Type"                : "AWS::EC2::Subnet",
-            "DeletionPolicy"      : "Delete",
-            "Properties"          : {
-                "MapPublicIpOnLaunch" : true,
-                "EnableDns64"         : false,
-                "VpcId"               : {
-                    "Ref" : "EC2VPC"
-                },
-                "AvailabilityZoneId"  : {
-                    "Ref" : "AzId"
-                },
-                "PrivateDnsNameOptionsOnLaunch" : {
-                    "EnableResourceNameDnsARecord" : false,
-                    "HostnameType"                 : "ip-name",
-                    "EnableResourceNameDnsAAAARecord" : false
-                },
-                "CidrBlock"                     : "172.31.32.0/20",
-                "Ipv6Native"                    : false,
-                "Tags"                          : [
-                ]
-            }
-        },
-        "EC2Subnet"          : {
-            "UpdateReplacePolicy" : "Delete",
-            "Type"                : "AWS::EC2::Subnet",
-            "DeletionPolicy"      : "Delete",
-            "Properties"          : {
-                "MapPublicIpOnLaunch" : true,
-                "EnableDns64"         : false,
-                "VpcId"               : {
-                    "Ref" : "EC2VPC"
-                },
-                "AvailabilityZoneId"  : {
-                    "Ref" : "AzId"
-                },
-                "PrivateDnsNameOptionsOnLaunch" : {
-                    "EnableResourceNameDnsARecord" : false,
-                    "HostnameType"                 : "ip-name",
-                    "EnableResourceNameDnsAAAARecord" : false
-                },
-                "CidrBlock"                     : "172.31.0.0/20",
-                "Ipv6Native"                    : false,
-                "Tags"                          : [
-                ]
-            }
-        },
-        "EC2SubnetNetworkAclAssociation" : {
-            "UpdateReplacePolicy" : "Delete",
-            "Type"                : "AWS::EC2::SubnetNetworkAclAssociation",
-            "DeletionPolicy"      : "Delete",
-            "Properties"          : {
-                "NetworkAclId" : {
-                    "Ref" : "EC2NetworkAcl"
-                },
-                "SubnetId"     : {
-                    "Ref" : "EC2SubnetB9"
-                }
-            }
-        },
-        "EC2SubnetNetworkAclAssociationLN" : {
-            "UpdateReplacePolicy" : "Delete",
-            "Type"                : "AWS::EC2::SubnetNetworkAclAssociation",
-            "DeletionPolicy"      : "Delete",
-            "Properties"          : {
-                "NetworkAclId" : {
-                    "Ref" : "EC2NetworkAcl"
-                },
-                "SubnetId"     : {
-                    "Ref" : "EC2SubnetL7"
-                }
-            }
-        },
-        "EC2SubnetL7"                      : {
+        "EC2Subnet" : {
             "UpdateReplacePolicy" : "Delete",
             "Type"                : "AWS::EC2::Subnet",
             "DeletionPolicy"      : "Delete",
@@ -191,76 +47,13 @@
                 ]
             }
         },
-        "EC2SubnetNetworkAclAssociationOd" : {
-            "UpdateReplacePolicy" : "Delete",
-            "Type"                : "AWS::EC2::SubnetNetworkAclAssociation",
-            "DeletionPolicy"      : "Delete",
-            "Properties"          : {
-                "NetworkAclId" : {
-                    "Ref" : "EC2NetworkAcl"
-                },
-                "SubnetId"     : {
-                    "Ref" : "EC2Subnet"
-                }
-            }
-        },
-        "EC2SubnetNetworkAclAssociationMh" : {
-            "UpdateReplacePolicy" : "Delete",
-            "Type"                : "AWS::EC2::SubnetNetworkAclAssociation",
-            "DeletionPolicy"      : "Delete",
-            "Properties"          : {
-                "NetworkAclId" : {
-                    "Ref" : "EC2NetworkAcl"
-                },
-                "SubnetId"     : {
-                    "Ref" : "EC2SubnetKE"
-                }
-            }
-        },
-        "EC2SubnetNetworkAclAssociationTC" : {
-            "UpdateReplacePolicy" : "Delete",
-            "Type"                : "AWS::EC2::SubnetNetworkAclAssociation",
-            "DeletionPolicy"      : "Delete",
-            "Properties"          : {
-                "NetworkAclId" : {
-                    "Ref" : "EC2NetworkAcl"
-                },
-                "SubnetId"     : {
-                    "Ref" : "EC2SubnetEA"
-                }
-            }
-        },
-        "EC2SubnetHk"                      : {
-            "UpdateReplacePolicy" : "Delete",
-            "Type"                : "AWS::EC2::Subnet",
-            "DeletionPolicy"      : "Delete",
-            "Properties"          : {
-                "MapPublicIpOnLaunch" : true,
-                "EnableDns64"         : false,
-                "VpcId"               : {
-                    "Ref" : "EC2VPC"
-                },
-                "AvailabilityZoneId"  : {
-                    "Ref" : "AzId"
-                },
-                "PrivateDnsNameOptionsOnLaunch" : {
-                    "EnableResourceNameDnsARecord" : false,
-                    "HostnameType"                 : "ip-name",
-                    "EnableResourceNameDnsAAAARecord" : false
-                },
-                "CidrBlock"                     : "172.31.80.0/20",
-                "Ipv6Native"                    : false,
-                "Tags"                          : [
-                ]
-            }
-        },
-        "EC2Instance"                      : {
+        "EC2Instance" : {
             "UpdateReplacePolicy" : "Delete",
             "Type"                : "AWS::EC2::Instance",
             "DeletionPolicy"      : "Delete",
             "Properties"          : {
                 "Tenancy" : "default",
-                "InstanceInitiatedShutdownBehavior" : "stop",                
+                "InstanceInitiatedShutdownBehavior" : "stop",
                 "BlockDeviceMappings"               : [
                     {
                         "Ebs" : {
@@ -282,7 +75,7 @@
                     "EnableResourceNameDnsAAAARecord" : false
                 },
                 "SubnetId"                          : {
-                    "Ref" : "EC2SubnetL7"
+                    "Ref" : "EC2Subnet"
                 },
                 "SecurityGroupIds"                  : [
                     {
@@ -300,7 +93,7 @@
                 "Monitoring"                        : false,
                 "Tags"                              : [
                     {
-                        "Value" : "Dot Net Web Server (Created: ${AWS::StackName}-${AWS::Region})",
+                        "Value" : "Dot Net Web Server (Created: via cloud formation)",
                         "Key"   : "Name"
                     }
                 ],
@@ -312,31 +105,7 @@
                 }
             }
         },
-        "EC2SubnetB9"                      : {
-            "UpdateReplacePolicy" : "Delete",
-            "Type"                : "AWS::EC2::Subnet",
-            "DeletionPolicy"      : "Delete",
-            "Properties"          : {
-                "MapPublicIpOnLaunch" : true,
-                "EnableDns64"         : false,
-                "VpcId"               : {
-                    "Ref" : "EC2VPC"
-                },
-                "AvailabilityZoneId"  : {
-                    "Ref" : "AzId"
-                },
-                "PrivateDnsNameOptionsOnLaunch" : {
-                    "EnableResourceNameDnsARecord" : false,
-                    "HostnameType"                 : "ip-name",
-                    "EnableResourceNameDnsAAAARecord" : false
-                },
-                "CidrBlock"                     : "172.31.64.0/20",
-                "Ipv6Native"                    : false,
-                "Tags"                          : [
-                ]
-            }
-        },
-        "EC2DHCPOptions"                   : {
+        "EC2DHCPOptions" : {
             "UpdateReplacePolicy" : "Delete",
             "Type"                : "AWS::EC2::DHCPOptions",
             "DeletionPolicy"      : "Delete",
@@ -349,7 +118,7 @@
                 ]
             }
         },
-        "EC2Route"                         : {
+        "EC2Route"       : {
             "UpdateReplacePolicy" : "Delete",
             "Type"                : "AWS::EC2::Route",
             "DeletionPolicy"      : "Delete",
@@ -363,7 +132,7 @@
                 }
             }
         },
-        "EC2SecurityGroupLk"               : {
+        "EC2SecurityGroupLk" : {
             "UpdateReplacePolicy" : "Delete",
             "Type"                : "AWS::EC2::SecurityGroup",
             "DeletionPolicy"      : "Delete",
@@ -411,20 +180,7 @@
                 ]
             }
         },
-        "EC2SubnetNetworkAclAssociationBd" : {
-            "UpdateReplacePolicy" : "Delete",
-            "Type"                : "AWS::EC2::SubnetNetworkAclAssociation",
-            "DeletionPolicy"      : "Delete",
-            "Properties"          : {
-                "NetworkAclId" : {
-                    "Ref" : "EC2NetworkAcl"
-                },
-                "SubnetId"     : {
-                    "Ref" : "EC2SubnetHk"
-                }
-            }
-        },
-        "EC2VPCDHCPOptionsAssociation"     : {
+        "EC2VPCDHCPOptionsAssociation" : {
             "UpdateReplacePolicy" : "Delete",
             "Type"                : "AWS::EC2::VPCDHCPOptionsAssociation",
             "DeletionPolicy"      : "Delete",
@@ -437,7 +193,7 @@
                 }
             }
         },
-        "EC2VPC"                           : {
+        "EC2VPC"                       : {
             "UpdateReplacePolicy" : "Delete",
             "Type"                : "AWS::EC2::VPC",
             "DeletionPolicy"      : "Delete",
@@ -450,7 +206,7 @@
                 ]
             }
         },
-        "EC2NetworkInterface"              : {
+        "EC2NetworkInterface"          : {
             "UpdateReplacePolicy" : "Delete",
             "Type"                : "AWS::EC2::NetworkInterface",
             "DeletionPolicy"      : "Delete",
@@ -475,7 +231,7 @@
                 "Ipv6Prefixes"                   : [
                 ],
                 "SubnetId"                       : {
-                    "Ref" : "EC2SubnetL7"
+                    "Ref" : "EC2Subnet"
                 },
                 "SourceDestCheck"                : true,
                 "InterfaceType"                  : "interface",
@@ -486,7 +242,7 @@
                 }
             }
         },
-        "EC2RouteTable"                    : {
+        "EC2RouteTable"                : {
             "UpdateReplacePolicy" : "Delete",
             "Type"                : "AWS::EC2::RouteTable",
             "DeletionPolicy"      : "Delete",
@@ -496,7 +252,7 @@
                 }
             }
         },
-        "EC2InternetGateway"               : {
+        "EC2InternetGateway"           : {
             "UpdateReplacePolicy" : "Delete",
             "Type"                : "AWS::EC2::InternetGateway",
             "DeletionPolicy"      : "Delete",
@@ -505,19 +261,18 @@
                 ]
             }
         },
-        "EC2NetworkAcl"                    : {
-            "UpdateReplacePolicy" : "Delete",
-            "Type"                : "AWS::EC2::NetworkAcl",
-            "DeletionPolicy"      : "Delete",
-            "Properties"          : {
-                "VpcId" : {
-                    "Ref" : "EC2VPC"
+        "SubnetRouteTableAssociationDefault" : {
+            "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties" : {
+                "RouteTableId" : {
+                    "Ref" : "EC2RouteTable"
                 },
-                "Tags"  : [
-                ]
+                "SubnetId"     : {
+                    "Ref" : "EC2Subnet"
+                }
             }
         },
-        "EC2VPCGatewayAttachment"          : {
+        "EC2VPCGatewayAttachment"            : {
             "Type" : "AWS::EC2::VPCGatewayAttachment",
             "Properties" : {
                 "VpcId" : {
