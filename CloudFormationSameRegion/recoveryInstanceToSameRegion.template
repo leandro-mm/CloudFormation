@@ -28,6 +28,10 @@
             "Type" : "String",
             "Default" : "eipalloc-08c014d050f8c6bd1",
             "Description" : "Optional Elastic IP Allocation ID to associate with the instance"
+        },
+        "InternetGateway"         : {
+            "Type" : "AWS::EC2::InternetGateway::Id",
+            "Default" : "igw-012b41bbcedf09feb"
         }
     },
     "Conditions"               : {
