@@ -32,50 +32,7 @@
     }
   },
   "Resources": {
-    "LambdaExecutionRole": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Principal": { "Service": [ "lambda.amazonaws.com" ] },
-              "Action": [ "sts:AssumeRole" ]
-            }
-          ]
-        },
-        "ManagedPolicyArns": [
-          "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-        ]
-      }
-    },
-    "TimestampGenerator": {
-      "Type": "AWS::Lambda::Function",
-      "Properties": {
-        "Handler": "index.handler",
-        "Runtime": "python3.12",
-        "Role": { "Fn::GetAtt": [ "LambdaExecutionRole", "Arn" ] },
-        "Code": {
-          "ZipFile": {
-            "Fn::Join": [
-              "",
-              [
-                "import json, datetime\n",
-                "def handler(event, context):\n",
-                "    return {'Data': datetime.datetime.utcnow().isoformat() + 'Z'}"
-              ]
-            ]
-          }
-        }
-      }
-    },
-    "StackCreationTime": {
-      "Type": "Custom::Timestamp",
-      "Properties": {
-        "ServiceToken": { "Fn::GetAtt": [ "TimestampGenerator", "Arn" ] }
-      }
-    },
+
     "EC2Instance": {
       "UpdateReplacePolicy": "Delete",
       "Type": "AWS::EC2::Instance",
@@ -123,8 +80,10 @@
         "Monitoring": false,
         "Tags": [
           {
-            "Value": "new EC Instance  (Stack created: ${AWS::StackCreationTime}))",
-            "Key": "Name"
+            "Key": "Name",
+            "Value": {
+              "Fn::Sub": "Web Server (Created: ${AWS::StackName}-${AWS::Region})"
+            }
           }
         ],
         "CreditSpecification": {
